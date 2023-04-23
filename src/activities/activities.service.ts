@@ -1,26 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Activity } from './entities/activity.entity';
 
 @Injectable()
 export class ActivitiesService {
-  create(createActivityDto: CreateActivityDto) {
-    return 'This action adds a new activity';
+
+  constructor(
+    @InjectRepository(Activity)
+    private activityRepository: Repository<Activity>,
+  ) { }
+
+  async create(createActivityDto: CreateActivityDto) {
+
+    if (!createActivityDto.title) {
+
+      throw new BadRequestException('title cannot be null');
+    }
+
+    return await this.activityRepository.save(createActivityDto);
   }
 
-  findAll() {
-    return `This action returns all activities`;
+  async findAll() {
+
+    return await this.activityRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} activity`;
+  async findOne(id: number) {
+
+    return await this.activityRepository.findOne({
+      where: {
+        id: id
+      }
+    });
   }
 
-  update(id: number, updateActivityDto: UpdateActivityDto) {
-    return `This action updates a #${id} activity`;
+  async update(id: number, updateActivityDto: UpdateActivityDto) {
+
+    return await this.activityRepository.update(id, updateActivityDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} activity`;
+  async remove(id: number) {
+
+    return await this.activityRepository.softDelete(id);
   }
 }

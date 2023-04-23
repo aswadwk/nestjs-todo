@@ -1,34 +1,59 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 
-@Controller('todos')
+@Controller('todo-items')
 export class TodosController {
-  constructor(private readonly todosService: TodosService) {}
+  constructor(private readonly todosService: TodosService) { }
 
   @Post()
-  create(@Body() createTodoDto: CreateTodoDto) {
-    return this.todosService.create(createTodoDto);
+  async create(@Body() createTodoDto: CreateTodoDto) {
+
+    return {
+      'status': 'success',
+      'message': 'success',
+      'data': await this.todosService.create(createTodoDto)
+    }
   }
 
   @Get()
-  findAll() {
-    return this.todosService.findAll();
+  async findAll(@Query('activity_group_id') activity_group_id?: number) {
+
+    return {
+      'status': 'success',
+      'message': 'success',
+      'data': await this.todosService.findAll(activity_group_id)
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.todosService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+
+    return {
+      'status': 'success',
+      'message': 'success',
+      'data': await this.todosService.findOne(+id)
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
-    return this.todosService.update(+id, updateTodoDto);
+  async update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
+
+    return {
+      'status': 'success',
+      'message': 'success',
+      'data': await this.todosService.update(+id, updateTodoDto)
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.todosService.remove(+id);
+  async remove(@Param('id') id: string) {
+
+    return {
+      'status': 'success',
+      'message': 'success',
+      'data': await this.todosService.remove(+id)
+    }
   }
 }
