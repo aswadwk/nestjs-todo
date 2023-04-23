@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,20 +30,33 @@ export class ActivitiesService {
 
   async findOne(id: number) {
 
-    return await this.activityRepository.findOne({
+    const activity = await this.activityRepository.findOne({
       where: {
         id: id
-      }
+      },
+      withDeleted: false
     });
+
+    if (!activity) {
+
+      throw new NotFoundException(`Activity with ID ${id} Not Found`);
+    }
+
+    return activity;
   }
 
   async update(id: number, updateActivityDto: UpdateActivityDto) {
+    const activity = await this.findOne(id);
 
-    return await this.activityRepository.update(id, updateActivityDto);
+    const updateActivity = Object.assign(activity, updateActivityDto);
+
+    return await this.activityRepository.save(updateActivity);
   }
 
   async remove(id: number) {
+    await this.findOne(id);
+    await this.activityRepository.softDelete(id);
 
-    return await this.activityRepository.softDelete(id);
+    return {}
   }
 }

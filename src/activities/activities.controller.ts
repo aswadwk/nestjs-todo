@@ -13,8 +13,8 @@ export class ActivitiesController {
   async create(@Body() createActivityDto: CreateActivityDto) {
 
     return {
-      'status': 'success',
-      'message': 'success',
+      'status': 'Success',
+      'message': 'Success',
       'data': await this.activitiesService.create(createActivityDto)
     };
   }
@@ -23,8 +23,8 @@ export class ActivitiesController {
   async findAll() {
 
     return {
-      'status': 'success',
-      'message': 'success',
+      'status': 'Success',
+      'message': 'Success',
       'data': await this.activitiesService.findAll()
     };
   }
@@ -33,8 +33,8 @@ export class ActivitiesController {
   async findOne(@Param('id') id: number) {
 
     return {
-      'status': 'success',
-      'message': 'success',
+      'status': 'Success',
+      'message': 'Success',
       'data': await this.activitiesService.findOne(id)
     };
   }
@@ -43,8 +43,8 @@ export class ActivitiesController {
   async update(@Param('id') id: string, @Body() updateActivityDto: UpdateActivityDto) {
 
     return {
-      'status': 'success',
-      'message': 'success',
+      'status': 'Success',
+      'message': 'Success',
       'data': await this.activitiesService.update(+id, updateActivityDto)
     };
   }
@@ -53,8 +53,8 @@ export class ActivitiesController {
   async remove(@Param('id') id: string) {
 
     return {
-      'status': 'success',
-      'message': 'success',
+      'status': 'Success',
+      'message': 'Success',
       'data': await this.activitiesService.remove(+id)
     };
   }
